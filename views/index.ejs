@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+  <title>The Digital Twin of Festivity</title>
+</head>
+
+<body>
+  <div class="container">
+    <h1>祝祭のデジタルツイン</h1>
+    <div class="message">
+      <%= msg %>
+    </div>
+    <h2>オブジェクト登録フォーム</h2>
+    <form action="/" method="POST">
+      <div class="form-container">
+        <div class="form-group">
+          <label for="id">ID</label>
+          <input type="text" id="id" name="id" placeholder="IDを入力してください">
+        </div>
+        <div class="form-group">
+          <label for="type">Type</label>
+          <select id="type" name="type">
+            <option value="null" disabled selected>Typeを選択してください</option>
+            <option value="0">Object#0</option>
+            <option value="1">Object#1</option>
+            <option value="2">Object#2</option>
+            <option value="3">Object#3</option>
+          </select>
+        </div>
+        <button type="submit">登録</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

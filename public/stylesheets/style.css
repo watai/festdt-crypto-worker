@@ -1,0 +1,67 @@
+body {
+margin: 0;
+padding: 0;
+font-size: 16px;
+font-family: sans-serif;
+line-height: 1.5;
+}
+
+input {
+font-size: 18px;
+}
+
+form {
+font-size: 18px;
+}
+
+button {
+padding: 10px;
+background-color: #07f;
+color: #fff;
+border: solid 1px #000;
+border-radius: 5px;
+line-height: 1;
+cursor: pointer;
+font-size: 16px;
+}
+
+button:hover {
+background-color: #0af;
+}
+
+.container {
+margin: auto;
+padding: 20px;
+width: 800px;
+}
+
+.message {
+margin: 30px;
+text-align: center;
+font-weight: bold;
+}
+
+h1, h2 {
+text-align: center;
+}
+
+.form-container {
+width: 400px;
+margin: auto;
+text-align: center;
+}
+
+.form-container input {
+margin: 15px;
+width: 200px;
+border: none;
+border-bottom: solid 1px #aaa;
+}
+
+.form-container button {
+margin: 10px;
+}
+
+.form-group {
+    text-align: left;
+}
