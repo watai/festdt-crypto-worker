@@ -7,7 +7,7 @@ admin.initializeApp({
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
     }),
-    databaseURL: "https://festdt-web-project-default-rtdb.firebaseio.com"
+    databaseURL: "https://festdt-default-rtdb.firebaseio.com"
 });
 
 const db = admin.database();
