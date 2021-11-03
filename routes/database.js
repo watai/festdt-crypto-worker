@@ -1,3 +1,4 @@
+const client = require('./client');
 require('dotenv').config();
 const admin = require('firebase-admin');
 
@@ -21,6 +22,8 @@ exports.startDBListeners = () => {
         let type = data.Type;
         let msg = 'Get New Object [Id:' + id + ', Type:' + type + ']'
         console.log(msg);
+        // send osc message to local app
+        client.sendMessage('/mikoshi/wasshoi', type);
     }, function (error) {
         console.log('Failed to add New Object:' + error.code);
     });
