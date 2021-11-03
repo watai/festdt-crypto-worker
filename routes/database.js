@@ -15,17 +15,14 @@ const ref = db.ref('objects');
 
 // event handler
 exports.startDBListeners = () => {
-    // added CryptObject
     ref.child('crypto').on('child_added', function (snapshot) {
-        console.log('Added Crypt Object!!');
         const data = snapshot.val();
-        const id = data.Id;
-        const type = data.Type;
-        console.log(data);
-
-
+        let id = data.Id;
+        let type = data.Type;
+        let msg = 'Get New Object [Id:' + id + ', Type:' + type + ']'
+        console.log(msg);
     }, function (error) {
-        console.log('Failed to add "Crypt Object": ' + error.code);
+        console.log('Failed to add New Object:' + error.code);
     });
 }
 
