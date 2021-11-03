@@ -4,13 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// firebase event handler
+// start firebase event handler
 // var database = require('./routes/database')
 // database.startDBListeners();
 
 var indexRouter = require('./routes/index');
 var indexFormRouter = require('./routes/form');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -26,7 +25,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.post('/', indexFormRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
