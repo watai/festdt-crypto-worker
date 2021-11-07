@@ -29,14 +29,39 @@ exports.startDBListeners = () => {
     });
 }
 
-
 exports.sendData = (child, id, type) => {
-    const date = new Date().getTime();
-    const json = {
-        'Id': id,
-        'Type': type,
-        'CreatedAt': date
+    let json = getJson(child, id, type);
+    // send data
+    const newRef = ref.child(child).push();
+    newRef.set(json);
+    console.log('Added Object [Id:' + id + ', Type:' + type + ']');
+
+    if (child == 'effects') {
+        setTimeout(() => {
+            // remove data
+            newRef.remove();
+            console.log('Removed Effect Object');
+        }, 10000);
     }
-    // send message
-    ref.child(child).push(json);
+}
+
+getJson = (child, id, type) => {
+    const date = new Date().getTime();
+    let json;
+    if (child == 'crypto') {
+        json = {
+            'Id': id,
+            'Type': type,
+            'CreatedAt': date
+        }
+    } else {
+        json = {
+            'Id': id,
+            'Type': type,
+            'Position': { 'x': 0, 'y': 0, 'z': 1 },
+            'Rotation': { 'w': 1, 'x': 0, 'y': 0, 'z': 0 },
+            'CreatedAt': date
+        }
+    }
+    return json;
 }

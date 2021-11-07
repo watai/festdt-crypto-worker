@@ -9,12 +9,13 @@
 
 <body>
   <div class="container">
-    <h1>祝祭のデジタルツイン</h1>
+    <h1>The Digital Twin of Festivity</h1>
     <div class="message">
       <%= msg %>
     </div>
     <h2>Registration Form</h2>
     <form action="/" method="POST">
+      <h3>Crypt Object for WEB</h3>
       <div class="form-container">
         <div class="form-group">
           <label for="id">OBJECT ID</label>
@@ -29,7 +30,28 @@
             <option value="2">Object#2</option>
           </select>
         </div>
-        <button type="submit">Submit</button>
+        <button type="submit" name="submit1">Submit</button>
+      </div>
+    </form>
+    <form action="/" method="POST">
+      <h3>Effect Object for AR</h3>
+      <div class="form-container">
+        <div class="form-group">
+          <label for="eid">EFFECT ID</label>
+          <input type="text" id="eid" name="eid" placeholder="Please input dummy id!">
+        </div>
+        <div class="form-group">
+          <label for="etype">EFFECT TYPE</label>
+          <select id="etype" name="etype">
+            <option value="null" disabled selected>Please select type!</option>
+            <option value="0">Effect#0</option>
+            <option value="1">Effect#1</option>
+            <option value="2">Effect#2</option>
+            <option value="3">Effect#3</option>
+            <option value="4">Effect#4</option>
+          </select>
+        </div>
+        <button type="submit" name="submit2">Submit</button>
       </div>
     </form>
   </div>
