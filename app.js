@@ -8,6 +8,10 @@ var logger = require('morgan');
 // var database = require('./routes/database')
 // database.startDBListeners();
 
+// start scheduler
+// var schedule = require('./routes/schedule');
+// schedule.start();
+
 var indexRouter = require('./routes/index');
 var indexFormRouter = require('./routes/form');
 

@@ -6,7 +6,7 @@ exports.sendMessage = (addr, msg) => {
         if (err) {
             console.error(err);
         } else {
-            console.log('Send Message:' + addr + ' ' + String(msg));
+            console.log('[OSC]: Send Message:' + addr + ' ' + String(msg));
         }
     });
 }

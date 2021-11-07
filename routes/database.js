@@ -1,6 +1,6 @@
-const client = require('./client');
 require('dotenv').config();
 const admin = require('firebase-admin');
+const client = require('./client');
 
 admin.initializeApp({
     credential: admin.credential.cert({
@@ -16,16 +16,15 @@ const ref = db.ref('objects');
 
 // event handler
 exports.startDBListeners = () => {
-    ref.child('crypto').on('child_added', function (snapshot) {
+    ref.child('crypto').orderByChild('CreatedAt').limitToLast(1).on('child_added', function (snapshot) {
         const data = snapshot.val();
         let id = data.Id;
         let type = data.Type;
-        let msg = 'Get New Object [Id:' + id + ', Type:' + type + ']'
-        console.log(msg);
+        console.log('[DB]: Get New Object [Id:' + id + ', Type:' + type + ']');
         // send osc message to local app
         client.sendMessage('/mikoshi/wasshoi', type);
     }, function (error) {
-        console.log('Failed to add New Object:' + error.code);
+        console.log('[DB]: Failed to add New Object:' + error.code);
     });
 }
 
@@ -34,13 +33,13 @@ exports.sendData = (child, id, type) => {
     // send data
     const newRef = ref.child(child).push();
     newRef.set(json);
-    console.log('Added Object [Id:' + id + ', Type:' + type + ']');
+    console.log('[DB]: Added Object [Id:' + id + ', Type:' + type + ']');
 
     if (child == 'effects') {
         setTimeout(() => {
             // remove data
             newRef.remove();
-            console.log('Removed Effect Object');
+            console.log('[DB]: Removed Effect Object');
         }, 10000);
     }
 }

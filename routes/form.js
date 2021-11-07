@@ -6,17 +6,20 @@ const crypto = require('crypto');
 router.post('/', function (req, res, next) {
     const { id, type, eid, etype } = req.body;
     if (id != null) {
-        const hash = crypto.createHash('sha256').update(id).digest('hex');
-        database.sendData('crypto', hash, parseInt(type, 10));
-        const data = { msg: 'Added Crypt Object [Id:' + hash + ', Type:' + type + ']' };
-        res.render('index', data);
+        const msg = sendData('crypto', id, type);
+        res.render('index', { msg: msg });
     }
     if (eid != null) {
-        const hash = crypto.createHash('sha256').update(eid).digest('hex');
-        database.sendData('effects', hash, parseInt(etype, 10));
-        const data = { msg: 'Added Effect Object [Id:' + hash + ', Type:' + etype + ']' };
-        res.render('index', data);
+        const msg = sendData('effects', eid, etype);
+        res.render('index', { msg: msg });
     }
 });
+
+sendData = (child, id, type) => {
+    const hash = crypto.createHash('sha256').update(id).digest('hex');
+    database.sendData(child, hash, parseInt(type, 10));
+    const msg = 'Added Object [Id:' + hash + ', Type:' + type + ']';
+    return msg;
+}
 
 module.exports = router;
