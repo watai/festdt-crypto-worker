@@ -5,8 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 // start firebase event handler
-// var database = require('./routes/database')
-// database.startDBListeners();
+var database = require('./routes/database')
+database.initialize();
+// start crypto object counter
+var counter = require('./routes/counter');
 
 // start scheduler
 // var schedule = require('./routes/schedule');
@@ -29,6 +31,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.post('/', indexFormRouter);
+app.get('/count', (req, res) => {
+  const data = counter.get();
+  res.json(data);
+  // console.log(JSON.stringify(data));
+});
+app.get('/del', (req, res) => {
+  let num = parseInt(req.query.num, 10);
+  database.removeData('crypto', num);
+  res.send('Delete ' + num + ' data frome DB');
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

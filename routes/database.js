@@ -1,6 +1,7 @@
 require('dotenv').config();
 const admin = require('firebase-admin');
-const client = require('./client');
+const counter = require('./counter');
+// const client = require('./client');
 
 admin.initializeApp({
     credential: admin.credential.cert({
@@ -14,17 +15,32 @@ admin.initializeApp({
 const db = admin.database();
 const ref = db.ref('objects');
 
-// event handler
-exports.startDBListeners = () => {
-    ref.child('crypto').orderByChild('CreatedAt').limitToLast(1).on('child_added', function (snapshot) {
-        const data = snapshot.val();
-        let id = data.Id;
-        let type = data.Type;
-        console.log('[DB]: Get New Object [Id:' + id + ', Type:' + type + ']');
+// initialize
+exports.initialize = () => {
+    const rootRef = ref.child('crypto');
+    rootRef.limitToLast(500).once('value', (snap) => {
+        const val = snap.val();
+        let cnt = 0;
+        for (const key of Object.keys(val)) {
+            cnt++;
+            if (cnt < snap.numChildren()) counter.set(val[key].Type);
+        }
+        console.log('[DB]: Initial data loading is complete');
+    }, (error) => {
+        console.log('[DB]: Failed to load initial data:' + error.code);
+    });
+
+    rootRef.limitToLast(1).on('child_added', (snap) => {
+        const val = snap.val();
+        let id = val.Id;
+        let type = val.Type;
+        // increase object type counter
+        counter.set(type);
         // send osc message to local app
-        client.sendMessage('/mikoshi/wasshoi', type);
-    }, function (error) {
-        console.log('[DB]: Failed to add New Object:' + error.code);
+        // client.sendMessage('/mikoshi/wasshoi', type);
+        console.log('[DB]: Get new object [Id:' + id + ', Type:' + type + ']');
+    }, (error) => {
+        console.log('[DB]: Failed to get new object:' + error.code);
     });
 }
 
@@ -32,16 +48,34 @@ exports.sendData = (child, id, type) => {
     let json = getJson(child, id, type);
     // send data
     const newRef = ref.child(child).push();
-    newRef.set(json);
-    console.log('[DB]: Added Object [Id:' + id + ', Type:' + type + ']');
+    newRef.set(json, (error) => {
+        if (error) {
+            console.log('[DB]: Data could not be saved:' + error);
+        } else {
+            console.log('[DB]: Send Data [Id:' + id + ', Type:' + type + ']');
+        }
+    });
 
     if (child == 'effects') {
         setTimeout(() => {
             // remove data
             newRef.remove();
-            console.log('[DB]: Removed Effect Object');
+            console.log('[DB]: Removed effect object');
         }, 10000);
     }
+}
+
+exports.removeData = (child, num) => {
+    const rootRef = ref.child(child);
+    rootRef.limitToFirst(num).once('value', (snap) => {
+        const val = snap.val();
+        for (const key of Object.keys(val)) {
+            rootRef.child(key).remove();
+        }
+        console.log('[DB]: Data deletion is complete');
+    }, (error) => {
+        console.log('[DB]: Failed to delete data:' + error.code);
+    });
 }
 
 getJson = (child, id, type) => {
