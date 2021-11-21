@@ -23,7 +23,7 @@ exports.initialize = () => {
         let cnt = 0;
         for (const key of Object.keys(val)) {
             cnt++;
-            if (cnt < snap.numChildren()) counter.set(val[key].Type);
+            if (cnt < snap.numChildren()) counter.add(val[key].Type);
         }
         console.log('[DB]: Initial data loading is complete');
     }, (error) => {
@@ -35,7 +35,7 @@ exports.initialize = () => {
         let id = val.Id;
         let type = val.Type;
         // increase object type counter
-        counter.set(type);
+        counter.add(type);
         // send osc message to local app
         // client.sendMessage('/mikoshi/wasshoi', type);
         console.log('[DB]: Get new object [Id:' + id + ', Type:' + type + ']');
@@ -70,6 +70,7 @@ exports.removeData = (child, num) => {
     rootRef.limitToFirst(num).once('value', (snap) => {
         const val = snap.val();
         for (const key of Object.keys(val)) {
+            counter.sub(val[key].Type);
             rootRef.child(key).remove();
         }
         console.log('[DB]: Data deletion is complete');
